@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Book a meeting · Mahammad Nuriyev</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2222%22 fill=%22%23006BFF%22/><text x=%2250%22 y=%2268%22 font-size=%2260%22 font-family=%22system-ui%22 font-weight=%22700%22 text-anchor=%22middle%22 fill=%22white%22>M</text></svg>" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #f7f7f5;
+    --card: #ffffff;
+    --ink: #0b0b0f;
+    --ink-2: #3a3a43;
+    --muted: #8b8b95;
+    --line: #e7e7e4;
+    --line-2: #efefec;
+    --brand: #006BFF;
+    --brand-ink: #0052cc;
+    --brand-soft: #e8f0ff;
+    --ok: #16a34a;
+    --warn: #d97706;
+    --radius: 14px;
+    --radius-sm: 10px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+    font-size:15px;
+    line-height:1.5;
+    min-height:100vh;
+  }
+  .shell{
+    max-width:1080px;
+    margin:0 auto;
+    padding:28px 20px 40px;
+  }
+  header.topbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:18px;
+  }
+  .logo{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-weight:600;
+    color:var(--ink);
+    text-decoration:none;
+    font-size:14px;
+    letter-spacing:-0.01em;
+  }
+  .logo-mark{
+    width:22px;height:22px;border-radius:6px;
+    background:linear-gradient(135deg,#006BFF 0%,#3b8eff 100%);
+    display:grid;place-items:center;color:#fff;font-weight:700;font-size:12px;
+  }
+  .topbar-right{display:flex;gap:14px;align-items:center;color:var(--muted);font-size:13px}
+  .topbar-right a{color:var(--ink-2);text-decoration:none}
+  .topbar-right a:hover{color:var(--ink)}
+
+  .card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    overflow:hidden;
+    box-shadow: 0 1px 0 rgba(10,10,15,0.02), 0 20px 40px -25px rgba(10,10,15,0.08);
+  }
+  .grid{
+    display:grid;
+    grid-template-columns: 320px 1fr;
+    min-height: 580px;
+  }
+  @media (max-width: 820px){
+    .grid{grid-template-columns: 1fr}
+  }
+
+  /* LEFT PANE */
+  .pane-left{
+    padding:28px 26px;
+    border-right:1px solid var(--line);
+    background: linear-gradient(180deg,#ffffff 0%, #fbfbfa 100%);
+  }
+  @media (max-width:820px){.pane-left{border-right:none;border-bottom:1px solid var(--line)}}
+  .avatar{
+    width:56px;height:56px;border-radius:50%;
+    background:
+      radial-gradient(circle at 30% 25%, #5aa8ff 0, #1f6fe0 55%, #134aa0 100%);
+    color:#fff;display:grid;place-items:center;font-weight:600;font-size:22px;
+    box-shadow: inset 0 0 0 3px rgba(255,255,255,0.2), 0 2px 6px rgba(0,0,0,0.12);
+    margin-bottom:14px;
+    font-family:'Fraunces', serif;
+  }
+  .host{font-size:13px;color:var(--muted);margin:0 0 2px;font-weight:500}
+  .host-name{
+    font-family:'Fraunces', Georgia, serif;
+    font-weight:500;
+    font-size:22px;
+    letter-spacing:-0.01em;
+    margin:0 0 4px;
+    color:var(--ink);
+  }
+  .event-title{
+    font-size:20px;font-weight:600;margin:20px 0 8px;letter-spacing:-0.015em;
+  }
+  .meta-line{
+    display:flex;align-items:center;gap:8px;
+    color:var(--ink-2);font-size:14px;margin:6px 0;
+  }
+  .meta-line svg{flex-shrink:0;color:var(--muted)}
+  .desc{font-size:14px;color:var(--ink-2);line-height:1.55;margin-top:14px}
+  .tz-pill{
+    margin-top:18px;
+    display:inline-flex;align-items:center;gap:6px;
+    padding:6px 10px;border:1px solid var(--line);border-radius:999px;
+    font-size:12.5px;color:var(--ink-2);background:#fff;
+  }
+
+  /* RIGHT PANE */
+  .pane-right{
+    padding:28px 28px 24px;
+    display:flex;flex-direction:column;
+  }
+  .step-title{
+    font-size:17px;font-weight:600;letter-spacing:-0.01em;margin:0 0 16px;
+  }
+  .back-btn{
+    background:none;border:none;padding:4px 8px;margin:0 0 10px -8px;
+    color:var(--ink-2);font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:4px;
+    border-radius:6px;font-family:inherit;
+  }
+  .back-btn:hover{background:var(--line-2);color:var(--ink)}
+
+  /* CALENDAR */
+  .cal-head{
+    display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;
+  }
+  .cal-month{font-weight:600;font-size:15px}
+  .cal-nav{display:flex;gap:4px}
+  .cal-nav button{
+    width:32px;height:32px;border:1px solid var(--line);background:#fff;
+    border-radius:8px;cursor:pointer;display:grid;place-items:center;color:var(--ink-2);
+  }
+  .cal-nav button:hover:not(:disabled){background:var(--line-2);color:var(--ink)}
+  .cal-nav button:disabled{opacity:0.35;cursor:not-allowed}
+  .dow{
+    display:grid;grid-template-columns:repeat(7,1fr);gap:2px;
+    font-size:11.5px;color:var(--muted);text-align:center;margin-bottom:4px;
+    text-transform:uppercase;letter-spacing:0.05em;font-weight:500;
+  }
+  .dow span{padding:6px 0}
+  .days{
+    display:grid;grid-template-columns:repeat(7,1fr);gap:2px;
+  }
+  .day{
+    aspect-ratio:1/1;
+    display:grid;place-items:center;
+    font-size:14px;font-weight:500;
+    border:none;background:transparent;cursor:pointer;
+    border-radius:50%;color:var(--ink);
+    font-family:inherit;
+    position:relative;
+    transition:background 0.12s ease;
+  }
+  .day.empty{visibility:hidden}
+  .day.disabled{color:#c9c9c9;cursor:not-allowed;font-weight:400}
+  .day.available{background:var(--brand-soft);color:var(--brand-ink);font-weight:600}
+  .day.available:hover{background:#d6e6ff}
+  .day.today{outline:1.5px solid var(--ink);outline-offset:-1.5px}
+  .day.selected{background:var(--brand) !important;color:#fff !important}
+
+  .layout-2col{
+    display:grid;grid-template-columns: 1fr 220px;gap:24px;align-items:start;
+  }
+  @media (max-width:680px){.layout-2col{grid-template-columns:1fr}}
+
+  /* TIME SLOTS */
+  .slots-head{
+    font-size:13.5px;font-weight:600;margin-bottom:10px;color:var(--ink);
+    display:flex;justify-content:space-between;align-items:center;
+  }
+  .slots-head small{font-weight:400;color:var(--muted);font-size:12px}
+  .slots{
+    display:flex;flex-direction:column;gap:8px;
+    max-height:360px;overflow-y:auto;padding-right:4px;
+  }
+  .slots::-webkit-scrollbar{width:6px}
+  .slots::-webkit-scrollbar-thumb{background:#ddd;border-radius:10px}
+  .slot{
+    padding:12px;border:1.5px solid var(--line);background:#fff;
+    border-radius:var(--radius-sm);font-weight:600;font-size:14px;color:var(--brand-ink);
+    cursor:pointer;font-family:inherit;text-align:center;
+    transition:all 0.12s ease;
+  }
+  .slot:hover{border-color:var(--brand);}
+  .slot.pair{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:0;border:none;background:transparent}
+  .slot.pair .half{
+    padding:12px;border:1.5px solid var(--brand);background:#fff;border-radius:var(--radius-sm);
+    font-weight:600;font-size:14px;color:var(--brand-ink);cursor:pointer;font-family:inherit;text-align:center;
+  }
+  .slot.pair .half.primary{background:var(--brand);color:#fff}
+  .slots-empty{color:var(--muted);font-size:14px;padding:20px 0;text-align:center}
+
+  /* FORM */
+  .form-wrap{max-width:560px}
+  .form-row{margin-bottom:16px}
+  .form-row label{
+    display:block;font-size:13px;font-weight:600;color:var(--ink);margin-bottom:6px;
+  }
+  .form-row label .req{color:#d14343;margin-left:2px}
+  .form-row input, .form-row textarea, .form-row select{
+    width:100%;padding:10px 12px;border:1.5px solid var(--line);
+    border-radius:var(--radius-sm);font-size:14px;font-family:inherit;color:var(--ink);
+    background:#fff;outline:none;transition:border-color 0.12s ease,box-shadow 0.12s ease;
+  }
+  .form-row input:focus, .form-row textarea:focus, .form-row select:focus{
+    border-color:var(--brand);box-shadow:0 0 0 3px rgba(0,107,255,0.12);
+  }
+  .form-row textarea{min-height:90px;resize:vertical;font-family:inherit}
+  .form-hint{font-size:12px;color:var(--muted);margin-top:5px}
+  .btn-primary{
+    background:var(--brand);color:#fff;border:none;border-radius:var(--radius-sm);
+    padding:11px 18px;font-weight:600;font-size:14px;cursor:pointer;font-family:inherit;
+    transition:background 0.12s ease;
+  }
+  .btn-primary:hover{background:var(--brand-ink)}
+  .btn-primary:disabled{opacity:0.5;cursor:not-allowed}
+  .chosen-slot{
+    display:flex;align-items:center;gap:10px;
+    padding:12px 14px;background:var(--brand-soft);border-radius:var(--radius-sm);
+    margin-bottom:18px;font-size:14px;color:var(--brand-ink);font-weight:500;
+  }
+  .chosen-slot svg{flex-shrink:0}
+
+  /* CONFIRMATION */
+  .confirm-wrap{text-align:center;padding:20px 0 10px}
+  .confirm-icon{
+    width:56px;height:56px;border-radius:50%;background:#e7f7ee;
+    display:grid;place-items:center;margin:0 auto 16px;color:var(--ok);
+    animation: pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  @keyframes pop{
+    0%{transform:scale(0.3);opacity:0}
+    100%{transform:scale(1);opacity:1}
+  }
+  .confirm-h1{
+    font-family:'Fraunces',serif;font-weight:500;font-size:28px;letter-spacing:-0.02em;
+    margin:0 0 8px;
+  }
+  .confirm-sub{color:var(--ink-2);margin:0 0 20px;font-size:15px}
+  .confirm-card{
+    background:#fbfbfa;border:1px solid var(--line);border-radius:var(--radius-sm);
+    padding:18px;text-align:left;margin:0 auto 18px;max-width:440px;
+  }
+  .confirm-row{
+    display:flex;gap:12px;align-items:flex-start;padding:8px 0;
+    border-bottom:1px dashed var(--line-2);font-size:14px;
+  }
+  .confirm-row:last-child{border-bottom:none}
+  .confirm-row .k{color:var(--muted);min-width:90px;font-weight:500}
+  .confirm-row .v{color:var(--ink);font-weight:500;flex:1}
+  .confirm-note{
+    color:var(--muted);font-size:12.5px;max-width:440px;margin:0 auto;line-height:1.5;
+  }
+  .confirm-actions{
+    display:flex;justify-content:center;gap:10px;margin-top:18px;flex-wrap:wrap;
+  }
+  .btn-ghost{
+    background:#fff;color:var(--ink);border:1px solid var(--line);
+    border-radius:var(--radius-sm);padding:9px 14px;font-weight:500;font-size:13.5px;
+    cursor:pointer;font-family:inherit;text-decoration:none;display:inline-flex;align-items:center;gap:6px;
+  }
+  .btn-ghost:hover{background:var(--line-2)}
+
+  footer.foot{
+    margin-top:18px;text-align:center;color:var(--muted);font-size:12px;
+  }
+  footer.foot a{color:var(--muted);text-decoration:none;margin:0 6px}
+  footer.foot a:hover{color:var(--ink-2)}
+
+  /* Step transitions */
+  .step{animation: fadeIn 0.25s ease}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+
+  .hidden{display:none !important}
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <header class="topbar">
+    <a class="logo" href="#">
+      <span class="logo-mark">M</span>
+      <span>meet/mahammad</span>
+    </a>
+    <div class="topbar-right">
+      <a href="help.html">Help</a>
+      <span style="color:var(--line)">·</span>
+      <a href="signin.html">Sign in</a>
+    </div>
+  </header>
+
+  <div class="card">
+    <div class="grid">
+      <!-- LEFT PANE: HOST + EVENT INFO -->
+      <aside class="pane-left">
+        <div class="avatar">MN</div>
+        <p class="host">HOSTED BY</p>
+        <h1 class="host-name">Mahammad Nuriyev</h1>
+        <div style="color:var(--muted);font-size:13px">Applied Scientist · Paris</div>
+
+        <h2 class="event-title" id="event-title">30 Min Meeting</h2>
+
+        <div class="meta-line">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <span id="meta-duration">30 min</span>
+        </div>
+        <div class="meta-line">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="m22 8-10 6L2 8"/></svg>
+          <span>Google Meet</span>
+        </div>
+        <div class="meta-line">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <span>Paris, France (CET)</span>
+        </div>
+
+        <p class="desc" id="event-desc">
+          A quick 30-minute call to discuss your project, collaboration ideas, or research topic. I'll send a Google Meet link after you confirm.
+        </p>
+
+        <div style="margin-top:14px;padding:10px 12px;background:#fff7e6;border:1px solid #ffe1a8;border-radius:10px;font-size:12.5px;color:#8a5a00;line-height:1.45">
+          <strong style="font-weight:600">Limited availability.</strong> Booking opens 3 days ahead. I'm at capacity most weeks, so if nothing fits, check back tomorrow.
+        </div>
+
+        <div class="tz-pill">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          <span id="tz-label">Central European Time</span>
+        </div>
+      </aside>
+
+      <!-- RIGHT PANE: BOOKING FLOW -->
+      <section class="pane-right">
+
+        <!-- STEP 1: EVENT TYPE -->
+        <div class="step" id="step-1">
+          <h3 class="step-title">Select a meeting type</h3>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <button class="slot" style="text-align:left;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;color:var(--ink)" onclick="pickEvent('15 Min Quick Chat','15 min','A short intro call — great for saying hi or a quick question.')">
+              <span>
+                <div style="font-weight:600;font-size:14.5px">15 Min Quick Chat</div>
+                <div style="font-weight:400;font-size:12.5px;color:var(--muted);margin-top:2px">Intros, quick questions</div>
+              </span>
+              <span style="color:var(--muted);font-weight:400;font-size:13px">15 min →</span>
+            </button>
+            <button class="slot" style="text-align:left;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;color:var(--ink)" onclick="pickEvent('30 Min Meeting','30 min','A quick 30-minute call to discuss your project, collaboration ideas, or research topic.')">
+              <span>
+                <div style="font-weight:600;font-size:14.5px">30 Min Meeting</div>
+                <div style="font-weight:400;font-size:12.5px;color:var(--muted);margin-top:2px">Most popular · project discussions</div>
+              </span>
+              <span style="color:var(--muted);font-weight:400;font-size:13px">30 min →</span>
+            </button>
+            <button class="slot" style="text-align:left;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;color:var(--ink)" onclick="pickEvent('60 Min Deep Dive','60 min','An hour-long technical discussion. Best for research collaboration and in-depth topics.')">
+              <span>
+                <div style="font-weight:600;font-size:14.5px">60 Min Deep Dive</div>
+                <div style="font-weight:400;font-size:12.5px;color:var(--muted);margin-top:2px">Research, technical deep dives</div>
+              </span>
+              <span style="color:var(--muted);font-weight:400;font-size:13px">60 min →</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- STEP 2: DATE + TIME -->
+        <div class="step hidden" id="step-2">
+          <button class="back-btn" onclick="goto(1)">← Back</button>
+          <h3 class="step-title">Select a date &amp; time</h3>
+          <div class="layout-2col">
+            <div>
+              <div class="cal-head">
+                <div class="cal-month" id="cal-month">—</div>
+                <div class="cal-nav">
+                  <button id="prev-btn" aria-label="Previous month">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+                  </button>
+                  <button id="next-btn" aria-label="Next month">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                  </button>
+                </div>
+              </div>
+              <div class="dow"><span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span></div>
+              <div class="days" id="days"></div>
+            </div>
+            <div id="slots-col">
+              <div class="slots-head" id="slots-head">Pick a date</div>
+              <div class="slots" id="slots"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 3: FORM -->
+        <div class="step hidden" id="step-3">
+          <button class="back-btn" onclick="goto(2)">← Back</button>
+          <h3 class="step-title">Enter details</h3>
+          <div class="chosen-slot" id="chosen-slot">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            <span id="chosen-slot-text">—</span>
+          </div>
+          <div class="form-wrap">
+            <div class="form-row">
+              <label>Name <span class="req">*</span></label>
+              <input id="f-name" type="text" placeholder="Your full name" autocomplete="name" />
+            </div>
+            <div class="form-row">
+              <label>Email <span class="req">*</span></label>
+              <input id="f-email" type="email" placeholder="you@example.com" autocomplete="email" />
+              <div class="form-hint">We'll send a calendar invite to this address.</div>
+            </div>
+            <div class="form-row">
+              <label>Phone number</label>
+              <input id="f-phone" type="tel" placeholder="+33 6 12 34 56 78" autocomplete="tel" />
+            </div>
+            <div class="form-row">
+              <label>Please share anything that will help prepare for our meeting</label>
+              <textarea id="f-notes" placeholder="Brief context, agenda, or questions..."></textarea>
+            </div>
+            <div class="form-row" style="display:flex;align-items:flex-start;gap:8px">
+              <input id="f-terms" type="checkbox" style="width:auto;margin-top:4px" checked />
+              <label for="f-terms" style="font-weight:400;font-size:12.5px;color:var(--ink-2);margin:0;line-height:1.45">
+                I agree to receive a calendar invitation and any follow-up communication related to this meeting.
+              </label>
+            </div>
+            <button class="btn-primary" id="submit-btn" onclick="submitForm()">Schedule Event</button>
+          </div>
+        </div>
+
+        <!-- STEP 4: CONFIRMATION -->
+        <div class="step hidden" id="step-4">
+          <div class="confirm-wrap">
+            <div class="confirm-icon">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <h2 class="confirm-h1">You are scheduled</h2>
+            <p class="confirm-sub">A calendar invitation has been sent to your email.</p>
+
+            <div class="confirm-card">
+              <div class="confirm-row"><div class="k">Event</div><div class="v" id="c-event">—</div></div>
+              <div class="confirm-row"><div class="k">When</div><div class="v" id="c-when">—</div></div>
+              <div class="confirm-row"><div class="k">Host</div><div class="v">Mahammad Nuriyev</div></div>
+              <div class="confirm-row"><div class="k">Where</div><div class="v">Google Meet <small style="color:var(--muted);font-weight:400">(link in email)</small></div></div>
+              <div class="confirm-row"><div class="k">Invitee</div><div class="v" id="c-invitee">—</div></div>
+            </div>
+
+            <div class="confirm-actions">
+              <a class="btn-ghost" href="#" onclick="downloadIcs();return false;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                Add to calendar
+              </a>
+              <a class="btn-ghost" href="#" onclick="reschedule();return false;">Reschedule</a>
+              <a class="btn-ghost" href="#" onclick="cancel();return false;">Cancel</a>
+            </div>
+
+            <p class="confirm-note" style="margin-top:22px">
+              Need to make a change? Use the links above. If anything looks off, reply directly to the confirmation email — it goes straight to Mahammad.
+            </p>
+          </div>
+        </div>
+
+      </section>
+    </div>
+  </div>
+
+  <footer class="foot">
+    <span>Powered by <strong style="color:var(--ink-2)">meet</strong></span>
+    <span> · </span>
+    <a href="terms.html">Terms</a>
+    <a href="privacy.html">Privacy</a>
+    <a href="report-abuse.html">Report abuse</a>
+  </footer>
+</div>
+
+<script>
+  // ---------- State ----------
+  const state = {
+    event: { title:'30 Min Meeting', duration:'30 min', desc:'' },
+    viewYear: null, viewMonth: null,
+    selectedDate: null,
+    selectedTime: null,
+    name:'', email:'', phone:'', notes:''
+  };
+
+  // ---------- Navigation ----------
+  function goto(n){
+    for (let i=1;i<=4;i++){
+      document.getElementById('step-'+i).classList.toggle('hidden', i!==n);
+    }
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+
+  function pickEvent(title, duration, desc){
+    state.event = { title, duration, desc };
+    document.getElementById('event-title').textContent = title;
+    document.getElementById('meta-duration').textContent = duration;
+    document.getElementById('event-desc').textContent = desc;
+    initCalendar();
+    goto(2);
+  }
+
+  // ---------- Helpers: date keys & deterministic availability ----------
+  function pad2(n){ return n.toString().padStart(2,'0'); }
+  function dayKey(dt){ return `${dt.getFullYear()}-${pad2(dt.getMonth()+1)}-${pad2(dt.getDate())}`; }
+  function todayKey(){ return dayKey(new Date()); }
+
+  // FNV-1a 32-bit hash (fast, deterministic)
+  function hashStr(s){
+    let h = 2166136261 >>> 0;
+    for (let i=0; i<s.length; i++){
+      h ^= s.charCodeAt(i);
+      h = Math.imul(h, 16777619);
+    }
+    return h >>> 0;
+  }
+
+  // Deterministic slot list for a given date.
+  // Seed = hash(today + target date) → identical for the whole calendar day,
+  // re-rolled at midnight. Very limited availability:
+  //   ~25% of eligible days have any slots; those have 1–3 slots.
+  function getSlotsFor(dt){
+    const seed = hashStr(todayKey() + '|' + dayKey(dt));
+    if ((seed % 100) >= 25) return [];              // 75% of days: nothing
+    const countTable = [1,1,1,1,2,2,3];             // bias toward 1–2
+    const n = countTable[(seed >>> 7) % countTable.length];
+    const pool = ['09:00','09:30','10:00','10:30','11:00','11:30',
+                  '14:00','14:30','15:00','15:30','16:00','16:30','17:00'];
+    // Deterministic shuffle via per-item hash
+    const decorated = pool.map((t,i) => ({ t, r: hashStr(seed + ':' + i + ':' + t) }));
+    decorated.sort((a,b) => a.r - b.r);
+    const picked = decorated.slice(0, n).map(x => x.t);
+    picked.sort();
+    return picked;
+  }
+
+  // Earliest bookable date: today + 3 full days
+  function getMinBookingDate(){
+    const d = new Date(); d.setHours(0,0,0,0);
+    d.setDate(d.getDate() + 3);
+    return d;
+  }
+
+  // ---------- Calendar ----------
+  const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+  function initCalendar(){
+    const now = new Date();
+    state.viewYear = now.getFullYear();
+    state.viewMonth = now.getMonth();
+    renderCalendar();
+  }
+
+  function renderCalendar(){
+    const y = state.viewYear, m = state.viewMonth;
+    document.getElementById('cal-month').textContent = MONTHS[m] + ' ' + y;
+    const firstDay = new Date(y, m, 1).getDay();
+    const daysInMonth = new Date(y, m+1, 0).getDate();
+    const today = new Date(); today.setHours(0,0,0,0);
+    const minBooking = getMinBookingDate();
+    const container = document.getElementById('days');
+    container.innerHTML = '';
+    for (let i=0;i<firstDay;i++){
+      const d = document.createElement('div'); d.className='day empty'; container.appendChild(d);
+    }
+    for (let day=1; day<=daysInMonth; day++){
+      const btn = document.createElement('button');
+      btn.className='day';
+      btn.textContent = day;
+      const dt = new Date(y, m, day);
+      const tooSoon = dt < minBooking;
+      const dow = dt.getDay();
+      const isWeekend = (dow === 0 || dow === 6);
+      const tooFar = (dt - today) / (1000*60*60*24) > 60;
+      const eligible = !tooSoon && !isWeekend && !tooFar;
+      // A day is only "available" (highlighted) if it actually has slots today
+      const hasSlots = eligible && getSlotsFor(dt).length > 0;
+      if (!hasSlots){
+        btn.classList.add('disabled');
+        btn.disabled = true;
+      } else {
+        btn.classList.add('available');
+        btn.onclick = () => selectDate(dt, btn);
+      }
+      if (dt.getTime() === today.getTime()) btn.classList.add('today');
+      if (state.selectedDate && dt.getTime() === state.selectedDate.getTime()) btn.classList.add('selected');
+      container.appendChild(btn);
+    }
+    // nav buttons
+    const now = new Date();
+    document.getElementById('prev-btn').disabled = (y === now.getFullYear() && m === now.getMonth());
+  }
+
+  document.getElementById('prev-btn').onclick = () => {
+    state.viewMonth--; if (state.viewMonth<0){state.viewMonth=11; state.viewYear--;}
+    renderCalendar();
+  };
+  document.getElementById('next-btn').onclick = () => {
+    state.viewMonth++; if (state.viewMonth>11){state.viewMonth=0; state.viewYear++;}
+    renderCalendar();
+  };
+
+  function selectDate(dt, btn){
+    state.selectedDate = dt;
+    state.selectedTime = null;
+    document.querySelectorAll('.day.selected').forEach(el=>el.classList.remove('selected'));
+    btn.classList.add('selected');
+    renderSlots();
+  }
+
+  // ---------- Time slots ----------
+  function renderSlots(){
+    const dt = state.selectedDate;
+    const slotsEl = document.getElementById('slots');
+    const head = document.getElementById('slots-head');
+    if (!dt){ head.textContent = 'Pick a date'; slotsEl.innerHTML=''; return; }
+    const weekday = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][dt.getDay()];
+    head.innerHTML = `${weekday}, ${MONTHS[dt.getMonth()].slice(0,3)} ${dt.getDate()} <small>12h</small>`;
+
+    const allSlots = getSlotsFor(dt);
+    if (allSlots.length === 0){
+      slotsEl.innerHTML = '<div class="slots-empty">No available times on this day</div>';
+      return;
+    }
+    slotsEl.innerHTML = '';
+    allSlots.forEach(t => {
+      const div = document.createElement('div');
+      if (state.selectedTime === t){
+        div.className = 'slot pair';
+        const left = document.createElement('button');
+        left.className='half'; left.textContent=t;
+        left.onclick = () => { state.selectedTime=null; renderSlots(); };
+        const right = document.createElement('button');
+        right.className='half primary'; right.textContent='Next';
+        right.onclick = () => { prepareFormStep(); goto(3); };
+        div.appendChild(left); div.appendChild(right);
+      } else {
+        div.className = 'slot';
+        div.textContent = t;
+        div.onclick = () => { state.selectedTime = t; renderSlots(); };
+      }
+      slotsEl.appendChild(div);
+    });
+  }
+
+  // ---------- Form ----------
+  function prepareFormStep(){
+    const dt = state.selectedDate;
+    const t = state.selectedTime;
+    const [h,mm] = t.split(':').map(Number);
+    const end = new Date(dt);
+    end.setHours(h);
+    end.setMinutes(mm + parseDurationMin());
+    const endStr = end.getHours().toString().padStart(2,'0') + ':' + end.getMinutes().toString().padStart(2,'0');
+    const weekday = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][dt.getDay()];
+    const text = `${t}–${endStr}, ${weekday}, ${MONTHS[dt.getMonth()]} ${dt.getDate()}, ${dt.getFullYear()}`;
+    document.getElementById('chosen-slot-text').textContent = text;
+  }
+
+  function parseDurationMin(){
+    const d = state.event.duration;
+    if (d.startsWith('15')) return 15;
+    if (d.startsWith('60')) return 60;
+    return 30;
+  }
+
+  function submitForm(){
+    const name = document.getElementById('f-name').value.trim();
+    const email = document.getElementById('f-email').value.trim();
+    const phone = document.getElementById('f-phone').value.trim();
+    const notes = document.getElementById('f-notes').value.trim();
+    const terms = document.getElementById('f-terms').checked;
+    if (!name){ flash('f-name'); return; }
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ flash('f-email'); return; }
+    if (!terms){ alert('Please agree to receive the calendar invitation.'); return; }
+    state.name = name; state.email = email; state.phone = phone; state.notes = notes;
+
+    // Simulate server latency for realism
+    const btn = document.getElementById('submit-btn');
+    btn.disabled = true;
+    btn.textContent = 'Scheduling…';
+    setTimeout(() => {
+      btn.textContent = 'Schedule Event';
+      btn.disabled = false;
+      showConfirmation();
+    }, 950 + Math.random()*500);
+  }
+
+  function flash(id){
+    const el = document.getElementById(id);
+    el.style.borderColor = '#d14343';
+    el.style.boxShadow = '0 0 0 3px rgba(209,67,67,0.15)';
+    el.focus();
+    setTimeout(() => { el.style.borderColor=''; el.style.boxShadow=''; }, 1500);
+  }
+
+  function showConfirmation(){
+    const dt = state.selectedDate;
+    const t = state.selectedTime;
+    const [h,mm] = t.split(':').map(Number);
+    const end = new Date(dt);
+    end.setHours(h);
+    end.setMinutes(mm + parseDurationMin());
+    const endStr = end.getHours().toString().padStart(2,'0') + ':' + end.getMinutes().toString().padStart(2,'0');
+    const weekday = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][dt.getDay()];
+    const whenStr = `${weekday}, ${MONTHS[dt.getMonth()]} ${dt.getDate()}, ${dt.getFullYear()} · ${t}–${endStr} (CET)`;
+    document.getElementById('c-event').textContent = state.event.title;
+    document.getElementById('c-when').textContent = whenStr;
+    document.getElementById('c-invitee').textContent = `${state.name} · ${state.email}`;
+    goto(4);
+  }
+
+  function reschedule(){
+    // Go back to date/time picker
+    goto(2);
+  }
+
+  function cancel(){
+    if (confirm('Are you sure you want to cancel this meeting?')){
+      alert('Your meeting has been canceled. A cancellation notice has been sent to your email.');
+    }
+  }
+
+  function downloadIcs(){
+    const dt = state.selectedDate;
+    const t = state.selectedTime;
+    const [h,mm] = t.split(':').map(Number);
+    const start = new Date(dt); start.setHours(h); start.setMinutes(mm);
+    const end = new Date(start); end.setMinutes(end.getMinutes() + parseDurationMin());
+    const fmt = d => d.toISOString().replace(/[-:]/g,'').replace(/\.\d{3}/,'');
+    const ics = [
+      'BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//meet//EN','BEGIN:VEVENT',
+      'UID:' + Date.now() + '@meet.local',
+      'DTSTAMP:' + fmt(new Date()),
+      'DTSTART:' + fmt(start),
+      'DTEND:' + fmt(end),
+      'SUMMARY:' + state.event.title + ' with Mahammad Nuriyev',
+      'DESCRIPTION:' + (state.notes || state.event.desc || ''),
+      'LOCATION:Google Meet',
+      'END:VEVENT','END:VCALENDAR'
+    ].join('\r\n');
+    const blob = new Blob([ics], {type:'text/calendar'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'meeting.ics';
+    document.body.appendChild(a); a.click(); a.remove();
+    URL.revokeObjectURL(url);
+  }
+
+  // ---------- Init ----------
+  try {
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    if (tz) document.getElementById('tz-label').textContent = tz.replace(/_/g,' ');
+  } catch(e){}
+</script>
+</body>
+</html>

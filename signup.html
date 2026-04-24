@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Create your account · meet</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2222%22 fill=%22%23006BFF%22/><text x=%2250%22 y=%2268%22 font-size=%2260%22 font-family=%22system-ui%22 font-weight=%22700%22 text-anchor=%22middle%22 fill=%22white%22>M</text></svg>" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f7f7f5; --card:#ffffff; --ink:#0b0b0f; --ink-2:#3a3a43;
+    --muted:#8b8b95; --line:#e7e7e4; --line-2:#efefec;
+    --brand:#006BFF; --brand-ink:#0052cc; --brand-soft:#e8f0ff;
+    --ok:#16a34a; --warn:#d97706; --err:#d14343;
+    --radius:14px; --radius-sm:10px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
+    background:var(--bg); color:var(--ink);
+    -webkit-font-smoothing:antialiased; font-size:15px; line-height:1.5; min-height:100vh;
+    display:flex; flex-direction:column;
+  }
+  .shell{flex:1; max-width:460px; width:100%; margin:0 auto; padding:28px 20px 40px}
+  header.topbar{display:flex; align-items:center; justify-content:space-between; margin-bottom:30px}
+  .logo{display:flex; align-items:center; gap:8px; font-weight:600; color:var(--ink); text-decoration:none; font-size:14px; letter-spacing:-0.01em}
+  .logo-mark{width:22px; height:22px; border-radius:6px; background:linear-gradient(135deg,#006BFF 0%,#3b8eff 100%); display:grid; place-items:center; color:#fff; font-weight:700; font-size:12px}
+  .topbar-right{display:flex; gap:14px; align-items:center; color:var(--muted); font-size:13px}
+  .topbar-right a{color:var(--ink-2); text-decoration:none}
+  .topbar-right a:hover{color:var(--ink)}
+
+  .card{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:34px 32px; box-shadow:0 1px 0 rgba(10,10,15,0.02), 0 20px 40px -25px rgba(10,10,15,0.08)}
+  .auth-title{font-family:'Fraunces', Georgia, serif; font-weight:500; font-size:26px; letter-spacing:-0.02em; margin:0 0 6px; text-align:center}
+  .auth-sub{color:var(--muted); text-align:center; font-size:14px; margin:0 0 24px}
+
+  .perks{display:flex; flex-direction:column; gap:6px; padding:14px 16px; background:#fbfbfa; border:1px solid var(--line); border-radius:var(--radius-sm); margin:0 0 22px}
+  .perk{display:flex; align-items:center; gap:8px; font-size:13px; color:var(--ink-2)}
+  .perk svg{color:var(--ok); flex-shrink:0}
+
+  .sso-btn{
+    width:100%; display:flex; align-items:center; justify-content:center; gap:10px;
+    padding:11px 14px; border:1.5px solid var(--line); background:#fff; border-radius:var(--radius-sm);
+    font-size:14px; font-weight:600; cursor:pointer; font-family:inherit; color:var(--ink);
+  }
+  .sso-btn:hover{background:var(--line-2)}
+  .sso-btn + .sso-btn{margin-top:10px}
+
+  .divider{display:flex; align-items:center; gap:10px; margin:22px 0; color:var(--muted); font-size:12px}
+  .divider::before, .divider::after{content:''; flex:1; height:1px; background:var(--line)}
+
+  .form-row{margin-bottom:14px}
+  .form-row label{display:block; font-size:13px; font-weight:600; color:var(--ink); margin-bottom:6px}
+  .form-row input{
+    width:100%; padding:10px 12px; border:1.5px solid var(--line);
+    border-radius:var(--radius-sm); font-size:14px; font-family:inherit; color:var(--ink);
+    background:#fff; outline:none; transition:border-color 0.12s ease, box-shadow 0.12s ease;
+  }
+  .form-row input:focus{border-color:var(--brand); box-shadow:0 0 0 3px rgba(0,107,255,0.12)}
+  .hint{font-size:12px; color:var(--muted); margin-top:5px}
+
+  /* password strength */
+  .pw-wrap{position:relative}
+  .pw-toggle{
+    position:absolute; right:10px; top:50%; transform:translateY(-50%);
+    background:none; border:none; padding:4px; cursor:pointer; color:var(--muted); border-radius:6px;
+  }
+  .pw-toggle:hover{color:var(--ink-2); background:var(--line-2)}
+  .strength{display:flex; gap:4px; margin-top:6px}
+  .bar{flex:1; height:4px; background:var(--line); border-radius:2px; transition:background 0.15s ease}
+  .bar.on-weak{background:var(--err)}
+  .bar.on-fair{background:var(--warn)}
+  .bar.on-good{background:#3b82f6}
+  .bar.on-strong{background:var(--ok)}
+  .strength-label{font-size:12px; color:var(--muted); margin-top:4px; min-height:16px}
+
+  .checkbox-row{display:flex; align-items:flex-start; gap:8px; margin-bottom:18px; font-size:12.5px; color:var(--ink-2); line-height:1.5}
+  .checkbox-row input{width:auto; margin-top:3px; flex-shrink:0}
+  .checkbox-row a{color:var(--brand-ink); text-decoration:none}
+  .checkbox-row a:hover{text-decoration:underline}
+
+  .btn-primary{
+    width:100%; background:var(--brand); color:#fff; border:none; border-radius:var(--radius-sm);
+    padding:11px 18px; font-weight:600; font-size:14px; cursor:pointer; font-family:inherit;
+  }
+  .btn-primary:hover{background:var(--brand-ink)}
+  .btn-primary:disabled{opacity:0.5; cursor:not-allowed}
+
+  .foot-link{text-align:center; margin-top:20px; font-size:14px; color:var(--ink-2)}
+  .foot-link a{color:var(--brand-ink); text-decoration:none; font-weight:600}
+  .foot-link a:hover{text-decoration:underline}
+
+  .success{text-align:center; padding:14px 0 4px}
+  .success-icon{width:56px; height:56px; border-radius:50%; background:#e7f7ee; color:var(--ok); display:grid; place-items:center; margin:0 auto 14px; animation:pop 0.4s cubic-bezier(0.34,1.56,0.64,1)}
+  @keyframes pop{0%{transform:scale(0.3); opacity:0}100%{transform:scale(1); opacity:1}}
+  .success h2{font-family:'Fraunces', serif; font-weight:500; font-size:24px; margin:0 0 6px; letter-spacing:-0.01em}
+  .success p{color:var(--ink-2); font-size:14px; margin:0 0 12px}
+  .success .email-highlight{font-weight:600; color:var(--ink)}
+
+  footer.foot{margin-top:24px; text-align:center; color:var(--muted); font-size:12px}
+  footer.foot a{color:var(--muted); text-decoration:none; margin:0 6px}
+  footer.foot a:hover{color:var(--ink-2)}
+</style>
+</head>
+<body>
+<div class="shell">
+  <header class="topbar">
+    <a class="logo" href="index.html">
+      <span class="logo-mark">M</span>
+      <span>meet/mahammad</span>
+    </a>
+    <div class="topbar-right">
+      <a href="help.html">Help</a>
+    </div>
+  </header>
+
+  <div class="card" id="card-form">
+    <h1 class="auth-title">Create your account</h1>
+    <p class="auth-sub">Free forever — no credit card needed</p>
+
+    <div class="perks">
+      <div class="perk">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        <span>Unlimited bookings on a single event type</span>
+      </div>
+      <div class="perk">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        <span>One calendar integration (Google or Outlook)</span>
+      </div>
+      <div class="perk">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        <span>Automatic reminder emails</span>
+      </div>
+    </div>
+
+    <button class="sso-btn" onclick="fakeSso('Google')">
+      <svg width="18" height="18" viewBox="0 0 24 24">
+        <path fill="#EA4335" d="M12 10.2v3.9h5.4c-.2 1.4-1.7 4.1-5.4 4.1-3.2 0-5.9-2.7-5.9-6s2.7-6 5.9-6c1.9 0 3.1.8 3.8 1.4l2.6-2.5C16.8 3.5 14.6 2.5 12 2.5 6.8 2.5 2.6 6.7 2.6 12s4.2 9.5 9.4 9.5c5.4 0 9-3.8 9-9.2 0-.6-.1-1.1-.2-1.6H12z"/>
+      </svg>
+      <span>Sign up with Google</span>
+    </button>
+
+    <div class="divider">or with email</div>
+
+    <form id="signup-form" onsubmit="fakeSignup(event)">
+      <div class="form-row">
+        <label>Full name</label>
+        <input id="f-name" type="text" placeholder="Alex Morgan" autocomplete="name" required />
+      </div>
+      <div class="form-row">
+        <label>Work email</label>
+        <input id="f-email" type="email" placeholder="alex@company.com" autocomplete="email" required />
+      </div>
+      <div class="form-row">
+        <label>Password</label>
+        <div class="pw-wrap">
+          <input id="f-pw" type="password" placeholder="At least 8 characters" autocomplete="new-password" required minlength="8" oninput="updateStrength()" />
+          <button type="button" class="pw-toggle" onclick="togglePw()" aria-label="Show password">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="eye-ic"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+        <div class="strength" id="strength-bars">
+          <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+        </div>
+        <div class="strength-label" id="strength-label"></div>
+      </div>
+      <div class="form-row">
+        <label>Company (optional)</label>
+        <input id="f-company" type="text" placeholder="Acme Inc." autocomplete="organization" />
+      </div>
+
+      <div class="checkbox-row">
+        <input id="f-terms" type="checkbox" required />
+        <label for="f-terms" style="margin:0; font-weight:400">
+          I agree to the <a href="terms.html">Terms of Service</a> and <a href="privacy.html">Privacy Policy</a>, and to receive product updates by email.
+        </label>
+      </div>
+
+      <button type="submit" class="btn-primary" id="submit-btn">Create account</button>
+    </form>
+
+    <p class="foot-link">Already have an account? <a href="signin.html">Sign in</a></p>
+  </div>
+
+  <div class="card" id="card-success" style="display:none">
+    <div class="success">
+      <div class="success-icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      </div>
+      <h2>Check your inbox</h2>
+      <p>We've sent a verification link to <span class="email-highlight" id="sent-email">—</span>.<br />Click it to activate your account.</p>
+      <p style="margin-top:18px; font-size:12.5px; color:var(--muted)">Didn't get the email? Check your spam folder, or <a href="#" onclick="resend();return false;" style="color:var(--brand-ink); text-decoration:none; font-weight:600">resend it</a>.</p>
+    </div>
+  </div>
+
+  <footer class="foot">
+    <span>Powered by <strong style="color:var(--ink-2)">meet</strong></span>
+    <span> · </span>
+    <a href="terms.html">Terms</a>
+    <a href="privacy.html">Privacy</a>
+    <a href="report-abuse.html">Report abuse</a>
+  </footer>
+</div>
+
+<script>
+  function togglePw(){
+    const inp = document.getElementById('f-pw');
+    const ic = document.getElementById('eye-ic');
+    if (inp.type === 'password'){
+      inp.type = 'text';
+      ic.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>';
+    } else {
+      inp.type = 'password';
+      ic.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
+    }
+  }
+
+  function scorePassword(s){
+    let score = 0;
+    if (s.length >= 8) score++;
+    if (s.length >= 12) score++;
+    if (/[A-Z]/.test(s) && /[a-z]/.test(s)) score++;
+    if (/\d/.test(s) && /[^A-Za-z0-9]/.test(s)) score++;
+    return Math.min(4, score);
+  }
+
+  function updateStrength(){
+    const s = document.getElementById('f-pw').value;
+    const bars = document.getElementById('strength-bars').children;
+    const label = document.getElementById('strength-label');
+    const classes = ['on-weak','on-fair','on-good','on-strong'];
+    const labels = ['','Too weak','Fair','Good','Strong'];
+    const n = s.length === 0 ? 0 : scorePassword(s);
+    for (let i=0; i<4; i++){
+      bars[i].className = 'bar';
+      if (i < n){
+        const cls = n === 1 ? 'on-weak' : n === 2 ? 'on-fair' : n === 3 ? 'on-good' : 'on-strong';
+        bars[i].classList.add(cls);
+      }
+    }
+    label.textContent = labels[n];
+    label.style.color = n >= 3 ? 'var(--ok)' : n === 2 ? 'var(--warn)' : n === 1 ? 'var(--err)' : 'var(--muted)';
+  }
+
+  function fakeSignup(e){
+    e.preventDefault();
+    const email = document.getElementById('f-email').value.trim();
+    const btn = document.getElementById('submit-btn');
+    btn.disabled = true;
+    btn.textContent = 'Creating account…';
+    setTimeout(() => {
+      document.getElementById('sent-email').textContent = email;
+      document.getElementById('card-form').style.display = 'none';
+      document.getElementById('card-success').style.display = 'block';
+      window.scrollTo({top:0, behavior:'smooth'});
+    }, 1000 + Math.random()*600);
+  }
+
+  function fakeSso(provider){
+    alert(`${provider} sign-up is not configured in this demo.`);
+  }
+
+  function resend(){
+    alert('We\'ve resent the verification email. Give it a minute to arrive.');
+  }
+</script>
+</body>
+</html>
